@@ -1,4 +1,9 @@
 require_relative "coordinate.rb"
+require_relative "north.rb"
+require_relative "east.rb"
+require_relative "south.rb"
+require_relative "west.rb"
+
 
 class Rover
   attr_accessor :rover_coord, :direction
@@ -22,10 +27,10 @@ class Rover
     direction = @direction
     directions = ['N','E','S','W']
     direction_hash = {
-      'N' => Coordinate.new(0, 1),
-      'E' => Coordinate.new(1, 0),
-      'S' => Coordinate.new(0, -1),
-      'W' => Coordinate.new(-1, 0)
+      'N' => North.new(),
+      'E' => East.new(),
+      'S' => South.new(),
+      'W' => West.new(),
     }
     current_direction_index = directions.index(@direction)
     for instuction in instructions.split('')
@@ -39,7 +44,7 @@ class Rover
 
       # It's a movement instuction
       else
-        final_coord = final_coord.add(direction_hash[directions[current_direction_index % 4]])
+        final_coord = direction_hash[directions[current_direction_index % 4]].move_forward(final_coord)
       end
     end
     return final_coord, directions[current_direction_index % 4]
