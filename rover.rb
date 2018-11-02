@@ -25,28 +25,26 @@ class Rover
   def move(instructions)
     final_coord = @rover_coord
     direction = @direction
-    directions = ['N','E','S','W']
     direction_hash = {
       'N' => North.new(),
       'E' => East.new(),
       'S' => South.new(),
       'W' => West.new(),
     }
-    current_direction_index = directions.index(@direction)
     for instuction in instructions.split('')
       # Check whether it's a left rotation
       if instuction.upcase() == 'L'
-        current_direction_index -= 1
+        direction = direction_hash[direction].turn_left()
 
       # Check whether it's a right rotation
       elsif instuction.upcase() == 'R'
-        current_direction_index += 1
+        direction = direction_hash[direction].turn_right()
 
       # It's a movement instuction
       else
-        final_coord = direction_hash[directions[current_direction_index % 4]].move_forward(final_coord)
+        final_coord = direction_hash[direction].move(final_coord)
       end
     end
-    return final_coord, directions[current_direction_index % 4]
+    return final_coord, direction
   end
 end
