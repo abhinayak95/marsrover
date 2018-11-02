@@ -1,11 +1,13 @@
+ require_relative 'coordinate.rb'
+
 class Plateau
   attr_accessor :x_left_coord, :y_left_coord, :x_right_coord, :y_right_coord
-  def initialize(x_right_coord, y_right_coord)
-    @x_right_coord = x_right_coord.to_i()
-    @y_right_coord = y_right_coord.to_i()
+  def initialize(plateau_coords)
+    @x_right_coord = plateau_coords.x_coord
+    @y_right_coord = plateau_coords.y_coord
   end
-  def is_within_boundaries(x_coord, y_coord)
-    if x_coord > x_right_coord or y_coord > y_right_coord or x_coord < 0 or y_coord < 0
+  def is_within_boundaries(rover_coords)
+    if rover_coords.x_coord > x_right_coord or rover_coords.y_coord > y_right_coord or rover_coords.x_coord < 0 or rover_coords.y_coord < 0
       return false
     else
       return true
