@@ -1,29 +1,32 @@
 require_relative "coordinate.rb"
 
 class Rover
-  attr_accessor :x_coord, :y_coord, :direction
+  attr_accessor :rover_coord, :direction
 
-  def initialize(rover_coords, direction)
-    @x_coord = rover_coords.x_coord
-    @y_coord = rover_coords.y_coord
+  def initialize(rover_coord, direction)
+    @rover_coord = rover_coord
     @direction = direction.upcase()
   end
 
   def get_position
-    return Coordinate.new(@x_coord, @y_coord), @direction
+    return @rover_coord, @direction
   end
 
-  def set_position(rover_coords, direction)
-    @x_coord = rover_coords.x_coord
-    @y_coord = rover_coords.y_coord
+  def set_position(rover_coord, direction)
+    @rover_coord = rover_coord
     @direction = direction.upcase()
   end
 
   def move(instructions)
-    x_coord = @x_coord
-    y_coord = @y_coord
+    final_coord = @rover_coord
     direction = @direction
     directions = ['N','E','S','W']
+    direction_hash = {
+      'N' => Coordinate.new(0, 1),
+      'E' => Coordinate.new(1, 0),
+      'S' => Coordinate.new(0, -1),
+      'W' => Coordinate.new(-1, 0)
+    }
     current_direction_index = directions.index(@direction)
     for instuction in instructions.split('')
       # Check whether it's a left rotation
@@ -36,18 +39,9 @@ class Rover
 
       # It's a movement instuction
       else
-        case directions[current_direction_index % 4]
-          when 'N'
-            y_coord += 1
-          when 'E'
-            x_coord += 1
-          when 'S'
-            y_coord -= 1
-          when 'W'
-            x_coord -= 1
-        end
+        final_coord = final_coord.add(direction_hash[directions[current_direction_index % 4]])
       end
     end
-    return Coordinate.new(x_coord, y_coord), directions[current_direction_index % 4]
+    return final_coord, directions[current_direction_index % 4]
   end
 end
